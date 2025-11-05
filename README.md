@@ -1,0 +1,2 @@
+# CwaysiQR
+QR code generator
