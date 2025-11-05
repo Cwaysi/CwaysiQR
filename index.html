@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Cwaysi QR Code Generator with Logo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transform: translateY(0);
+            transition: var(--transition);
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+            opacity: 0.3;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            opacity: 0.9;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 1.5rem;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        input[type="text"], 
+        textarea, 
+        input[type="file"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--light);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        input[type="text"]:focus, 
+        textarea:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .input-with-icon {
+            padding-left: 2.5rem;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1rem;
+            background-color: var(--light);
+            color: var(--dark);
+            border: 1px dashed var(--gray);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+        
+        .file-input-button:hover {
+            background-color: #e9ecef;
+            border-color: var(--primary);
+        }
+        
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+            display: none;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 480px) {
+            .controls {
+                flex-direction: column;
+            }
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #3ab8dd;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+        
+        .slider-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .qr-container {
+            margin: 2rem auto;
+            text-align: center;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            background-color: var(--light);
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition);
+            border: 2px dashed #e0e0e0;
+        }
+        
+        .qr-container.has-code {
+            border-color: var(--primary);
+            background-color: white;
+        }
+        
+        .qr-placeholder {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        #qrcode {
+            position: relative;
+            display: inline-block;
+            transition: var(--transition);
+        }
+        
+        #qrcode canvas {
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+        
+        #qrcode:hover canvas {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        #logo-preview {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 20%;
+            max-height: 20%;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        #logo-preview.visible {
+            opacity: 1;
+        }
+        
+        .status {
+            margin-top: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .status.error {
+            background-color: #fdecea;
+            color: var(--danger);
+            display: block;
+        }
+        
+        .status.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        
+        .status.info {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .color-option {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .color-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .color-input {
+            width: 100%;
+            height: 40px;
+            padding: 0;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+        
+        .advanced-options {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            display: none;
+        }
+        
+        .advanced-options.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .toggle-advanced {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .toggle-advanced i {
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-advanced.active i {
+            transform: rotate(180deg);
+        }
+        
+        .corner-dots {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .corner-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid #e0e0e0;
+        }
+        
+        .corner-dot:hover {
+            transform: scale(1.1);
+        }
+        
+        .corner-dot.active {
+            border-color: var(--primary);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.8);
+            z-index: 10;
+            border-radius: var(--border-radius);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .loading.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(67, 97, 238, 0.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-weight: 500;
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Cwaysi QR Code Generator</h1>
+            <p class="subtitle">Create custom QR codes with your logo and colors</p>
+        </div>
+        
+        <div class="content">
+            <div class="form-group">
+                <label for="qr-content">Content to encode</label>
+                <div class="input-wrapper">
+                    <i class="input-icon fas fa-link"></i>
+                    <textarea id="qr-content" class="input-with-icon" rows="3" placeholder="Enter URL, text, contact info..."></textarea>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>QR Code Size</label>
+                <div class="slider-container">
+                    <input type="range" min="100" max="1000" value="500" class="slider" id="qr-size">
+                    <span class="slider-value" id="qr-size-value">500</span>
+                    <span>px</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>QR Code Color</label>
+                <div class="color-picker">
+                    <div class="color-option">
+                        <label class="color-label">Dark Color</label>
+                        <input type="color" id="qr-color-dark" value="#000000" class="color-input">
+                    </div>
+                    <div class="color-option">
+                        <label class="color-label">Light Color</label>
+                        <input type="color" id="qr-color-light" value="#ffffff" class="color-input">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Add Logo (Optional)</label>
+                <div class="file-input-wrapper">
+                    <div class="file-input-button">
+                        <i class="fas fa-image"></i>
+                        <span>Choose logo image</span>
+                        <input type="file" id="logo-upload" class="file-input" accept="image/*">
+                    </div>
+                </div>
+                <div class="file-name" id="file-name"></div>
+                
+                <div class="slider-container" id="logo-size-container" style="display: none;">
+                    <label>Logo Size</label>
+                    <input type="range" min="5" max="30" value="30" class="slider" id="logo-size">
+                    <span class="slider-value" id="logo-size-value">30</span>
+                    <span>%</span>
+                </div>
+            </div>
+            
+            <button class="toggle-advanced" id="toggle-advanced">
+                <i class="fas fa-chevron-down"></i>
+                <span>Advanced Options</span>
+            </button>
+            
+            <div class="advanced-options" id="advanced-options">
+                <div class="form-group">
+                    <label>Corner Style</label>
+                    <div class="corner-dots">
+                        <div class="corner-dot active" data-shape="square" style="background-color: #000000;"></div>
+                        <div class="corner-dot" data-shape="dot" style="background-color: #000000; border-radius: 50%;"></div>
+                        <div class="corner-dot" data-shape="rounded" style="background-color: #000000; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="qr-margin">Margin</label>
+                    <div class="slider-container">
+                        <input type="range" min="0" max="10" value="2" class="slider" id="qr-margin">
+                        <span class="slider-value" id="qr-margin-value">2</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="qr-error-correction">Error Correction</label>
+                    <select id="qr-error-correction" class="input-with-icon">
+                        <option value="L">Low (7%)</option>
+                        <option value="M" selected>Medium (15%)</option>
+                        <option value="Q">Quartile (25%)</option>
+                        <option value="H">High (30%)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button id="generate-btn" class="btn btn-primary">
+                    <i class="fas fa-qrcode"></i>
+                    Generate QR Code
+                </button>
+                <button id="download-btn" class="btn btn-success" disabled>
+                    <i class="fas fa-download"></i>
+                    Download PNG
+                </button>
+            </div>
+            
+            <div id="status" class="status"></div>
+            
+            <div class="qr-container" id="qr-container">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Generating QR Code...</div>
+                </div>
+                
+                <p class="qr-placeholder" id="qr-placeholder">
+                    <i class="fas fa-qrcode" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                    Your QR code will appear here
+                </p>
+                
+                <div id="qrcode"></div>
+                <img id="logo-preview">
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Cwaysi QR Code Generator &copy; 2023 | Works offline</p>
+	<a href="https://ceo.up.railway.app">Justice Morison, Portfolio</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const qrContent = document.getElementById('qr-content');
+            const generateBtn = document.getElementById('generate-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            const qrSizeSlider = document.getElementById('qr-size');
+            const qrSizeValue = document.getElementById('qr-size-value');
+            const logoUpload = document.getElementById('logo-upload');
+            const logoSizeSlider = document.getElementById('logo-size');
+            const logoSizeValue = document.getElementById('logo-size-value');
+            const logoSizeContainer = document.getElementById('logo-size-container');
+            const qrContainer = document.getElementById('qr-container');
+            const qrcodeDiv = document.getElementById('qrcode');
+            const logoPreview = document.getElementById('logo-preview');
+            const statusDiv = document.getElementById('status');
+            const qrPlaceholder = document.getElementById('qr-placeholder');
+            const loadingDiv = document.getElementById('loading');
+            const fileNameDiv = document.getElementById('file-name');
+            const toggleAdvancedBtn = document.getElementById('toggle-advanced');
+            const advancedOptions = document.getElementById('advanced-options');
+            const qrColorDark = document.getElementById('qr-color-dark');
+            const qrColorLight = document.getElementById('qr-color-light');
+            const qrMarginSlider = document.getElementById('qr-margin');
+            const qrMarginValue = document.getElementById('qr-margin-value');
+            const qrErrorCorrection = document.getElementById('qr-error-correction');
+            const cornerDots = document.querySelectorAll('.corner-dot');
+            
+            // State variables
+            let currentQRCode = null;
+            let logoImage = null;
+            let cornerShape = 'square';
+            
+            // Event Listeners
+            generateBtn.addEventListener('click', generateQRCode);
+            downloadBtn.addEventListener('click', downloadQRCode);
+            logoUpload.addEventListener('change', handleLogoUpload);
+            qrSizeSlider.addEventListener('input', updateSliderValue);
+            logoSizeSlider.addEventListener('input', updateSliderValue);
+            qrMarginSlider.addEventListener('input', updateSliderValue);
+            toggleAdvancedBtn.addEventListener('click', toggleAdvancedOptions);
+            qrColorDark.addEventListener('input', generateQRCode);
+            qrColorLight.addEventListener('input', generateQRCode);
+            qrMarginSlider.addEventListener('input', generateQRCode);
+            qrErrorCorrection.addEventListener('change', generateQRCode);
+            
+            // Corner dots selection
+            cornerDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    cornerDots.forEach(d => d.classList.remove('active'));
+                    this.classList.add('active');
+                    cornerShape = this.dataset.shape;
+                    generateQRCode();
+                });
+            });
+            
+            // Initialize slider values
+            updateSliderValue();
+            
+            // Functions
+            function updateSliderValue() {
+                qrSizeValue.textContent = qrSizeSlider.value;
+                logoSizeValue.textContent = logoSizeSlider.value;
+                qrMarginValue.textContent = qrMarginSlider.value;
+            }
+            
+            function toggleAdvancedOptions() {
+                advancedOptions.classList.toggle('show');
+                toggleAdvancedBtn.classList.toggle('active');
+            }
+            
+            function handleLogoUpload(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // Validate file type
+                if (!file.type.match('image.*')) {
+                    showStatus('Please select an image file (JPEG, PNG, etc.)', 'error');
+                    return;
+                }
+                
+                // Validate image size (under 1MB)
+                if (file.size > 1000000) {
+                    showStatus('Logo should be smaller than 1MB', 'error');
+                    return;
+                }
+                
+                fileNameDiv.textContent = `Selected: ${file.name}`;
+                fileNameDiv.style.display = 'block';
+                logoSizeContainer.style.display = 'flex';
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    logoImage = new Image();
+                    logoImage.src = event.target.result;
+                    logoImage.onload = function() {
+                        logoPreview.src = this.src;
+                        logoPreview.classList.add('visible');
+                        showStatus('Logo loaded successfully', 'success');
+                        generateQRCode();
+                    };
+                    logoImage.onerror = function() {
+                        showStatus('Error loading image', 'error');
+                    };
+                };
+                reader.onerror = function() {
+                    showStatus('Error reading file', 'error');
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            function generateQRCode() {
+                const content = qrContent.value.trim();
+                const size = parseInt(qrSizeSlider.value);
+                
+                if (!content) {
+                    showStatus('Please enter some text or URL', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                loadingDiv.classList.add('active');
+                qrPlaceholder.style.display = 'none';
+                qrcodeDiv.innerHTML = '';
+                
+                // Hide status if it was showing a success message
+                if (statusDiv.classList.contains('success')) {
+                    statusDiv.style.display = 'none';
+                }
+                
+                // Generate after a small delay to allow UI to update
+                setTimeout(() => {
+                    try {
+                        // Clear previous QR code
+                        qrcodeDiv.innerHTML = '';
+                        
+                        // Create canvas for QR code
+                        const canvas = document.createElement('canvas');
+                        qrcodeDiv.appendChild(canvas);
+                        
+                        // QR code options
+                        const options = {
+                            width: size,
+                            margin: parseInt(qrMarginSlider.value),
+                            color: {
+                                dark: qrColorDark.value,
+                                light: qrColorLight.value
+                            },
+                            errorCorrectionLevel: qrErrorCorrection.value
+                        };
+                        
+                        // Generate QR code
+                        QRCode.toCanvas(canvas, content, options, function(error) {
+                            loadingDiv.classList.remove('active');
+                            
+                            if (error) {
+                                showStatus('Error generating QR code: ' + error.message, 'error');
+                                console.error(error);
+                                return;
+                            }
+                            
+                            currentQRCode = canvas;
+                            qrContainer.classList.add('has-code');
+                            
+                            // Add logo if available
+                            if (logoImage) {
+                                addLogoToQR(canvas, size);
+                            }
+                            
+                            // Update corner dots color
+                            updateCornerDotsColor();
+                            
+                            downloadBtn.disabled = false;
+                        });
+                    } catch (error) {
+                        loadingDiv.classList.remove('active');
+                        showStatus('Error generating QR code: ' + error.message, 'error');
+                        console.error(error);
+                    }
+                }, 100);
+            }
+            
+            function addLogoToQR(canvas, qrSize) {
+                const ctx = canvas.getContext('2d');
+                const logoSizePercentage = parseInt(logoSizeSlider.value) / 100;
+                const logoSize = Math.min(
+                    qrSize * logoSizePercentage,
+                    qrSize * 0.3 // Never exceed 30% of QR size
+                );
+                
+                // Calculate position to center the logo
+                const x = (qrSize - logoSize) / 2;
+                const y = (qrSize - logoSize) / 2;
+                
+                // Draw white background for logo
+                ctx.fillStyle = qrColorLight.value;
+                ctx.fillRect(x, y, logoSize, logoSize);
+                
+                // Draw logo
+                ctx.drawImage(logoImage, x, y, logoSize, logoSize);
+            }
+            
+            function downloadQRCode() {
+                if (!currentQRCode) {
+                    showStatus('Please generate a QR code first', 'error');
+                    return;
+                }
+                
+                // Create download link
+                const link = document.createElement('a');
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                link.download = `qrcode-${timestamp}.png`;
+                link.href = currentQRCode.toDataURL('image/png');
+                link.click();
+                
+                showStatus('QR code downloaded successfully', 'success');
+            }
+            
+            function showStatus(message, type) {
+                statusDiv.textContent = message;
+                statusDiv.className = 'status ' + type;
+                statusDiv.style.display = 'block';
+                
+                // Auto-hide success messages after 3 seconds
+                if (type === 'success') {
+                    setTimeout(() => {
+                        statusDiv.style.display = 'none';
+                    }, 3000);
+                }
+            }
+            
+            function updateCornerDotsColor() {
+                cornerDots.forEach(dot => {
+                    dot.style.backgroundColor = qrColorDark.value;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
